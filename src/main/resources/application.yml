@@ -1,0 +1,15 @@
+sever:
+  error:
+    include-stacktrace: on_param
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/ap_db
+    username: postgres
+    password: leop@77
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
