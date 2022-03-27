@@ -1,5 +1,6 @@
 package com.project.achadosperdidos.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,8 +18,5 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String numberDocument;
-
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
+    private Long userId;
 }

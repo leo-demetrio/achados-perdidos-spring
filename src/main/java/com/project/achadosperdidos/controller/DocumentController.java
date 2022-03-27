@@ -33,6 +33,11 @@ public class DocumentController {
         log.info(dateUtil.formatLocalDateTimeTiDatabaseStyle(LocalDateTime.now()));
         return new ResponseEntity<>(documentService.findByIdOrThrowsBadRequestException(id), HttpStatus.OK);
     }
+    @GetMapping(path = "/user/{id}")
+    public ResponseEntity<List<Document>> listAllOfUser(@PathVariable Long id){
+        log.info(dateUtil.formatLocalDateTimeTiDatabaseStyle(LocalDateTime.now()));
+        return new ResponseEntity<>(documentService.findDocumentsByIdOrThrowsBadRequestException(id), HttpStatus.OK);
+    }
     @PostMapping
     public ResponseEntity<Document> save(@RequestBody Document document){
         return new ResponseEntity<>(documentService.save(document),HttpStatus.CREATED);

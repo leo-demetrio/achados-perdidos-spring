@@ -1,6 +1,7 @@
 package com.project.achadosperdidos.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +24,4 @@ public class User {
     private Long id;
     private String email;
     private String password;
-
-    @OneToMany(mappedBy = "user")
-    private List<Document> documents = new ArrayList<>();
 }
