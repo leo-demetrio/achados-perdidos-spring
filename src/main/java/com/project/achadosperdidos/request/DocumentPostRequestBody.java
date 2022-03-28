@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 public class DocumentPostRequestBody {
     private String numberDocument;
-    private String email;
+    private Long userId;
 }

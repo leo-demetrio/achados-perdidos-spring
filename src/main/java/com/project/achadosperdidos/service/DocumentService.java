@@ -2,6 +2,7 @@ package com.project.achadosperdidos.service;
 
 import com.project.achadosperdidos.domain.Document;
 import com.project.achadosperdidos.repository.DocumentRepository;
+import com.project.achadosperdidos.request.DocumentPostRequestBody;
 import com.project.achadosperdidos.request.DocumentPutRequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,11 @@ public class DocumentService {
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Document not found"));
     }
 
-    public Document save(Document document) {
+    public Document save(DocumentPostRequestBody documentPostRequestBody) {
+        Document document = Document.builder()
+                .numberDocument(documentPostRequestBody.getNumberDocument())
+                .userId(documentPostRequestBody.getUserId())
+                .build();
         return documentRepository.save(document);
     }
     public void delete(Long id){

@@ -7,5 +7,4 @@ import lombok.Data;
 public class DocumentPutRequestBody {
     private Long id;
     private String numberDocument;
-    private String email;
 }

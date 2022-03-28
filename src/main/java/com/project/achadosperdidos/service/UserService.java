@@ -6,7 +6,6 @@ import com.project.achadosperdidos.repository.UserRepository;
 import com.project.achadosperdidos.request.UserPostRequestBody;
 import com.project.achadosperdidos.request.UserPutRequestBody;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,7 +14,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Log4j2
 public class UserService {
 
     private final UserRepository userRepository;

@@ -1,6 +1,7 @@
 package com.project.achadosperdidos.controller;
 
 import com.project.achadosperdidos.domain.Document;
+import com.project.achadosperdidos.request.DocumentPostRequestBody;
 import com.project.achadosperdidos.request.DocumentPutRequestBody;
 import com.project.achadosperdidos.service.DocumentService;
 import com.project.achadosperdidos.util.DateUtil;
@@ -39,8 +40,8 @@ public class DocumentController {
         return new ResponseEntity<>(documentService.findDocumentsByIdOrThrowsBadRequestException(id), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<Document> save(@RequestBody Document document){
-        return new ResponseEntity<>(documentService.save(document),HttpStatus.CREATED);
+    public ResponseEntity<Document> save(@RequestBody DocumentPostRequestBody documentPostRequestBody){
+        return new ResponseEntity<>(documentService.save(documentPostRequestBody),HttpStatus.CREATED);
     }
 
     @PutMapping
