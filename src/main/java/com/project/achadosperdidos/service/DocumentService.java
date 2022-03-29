@@ -14,9 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.print.Doc;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,15 +34,15 @@ public class DocumentService {
             return documentRepository.findById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Document not found"));
     }
-
     public Document save(DocumentPostRequestBody documentPostRequestBody) {
         Document document = simpleBuilderDocument(documentPostRequestBody);
         Document documentVerified =
                 verificationDocumentInBank.verifyDocumentInBank(documentPostRequestBody.getNumberDocument());
-        if(documentVerified == null){
-            return registerDocument(documentPostRequestBody, document);
-        }
-        return registerDocumentFound(documentPostRequestBody,document,documentVerified);
+
+        if(documentVerified == null) return registerDocument(documentPostRequestBody, document);
+        if(documentPostRequestBody.getSituation().equals(documentVerified.getSituation())) return document;
+        log.info("passou");
+        return registerDocumentFound(document,documentVerified);
     }
     public void delete(Long id){
         documentRepository.delete(findByIdOrThrowsBadRequestException(id));
@@ -64,16 +62,17 @@ public class DocumentService {
         emailHelper.sentEmailDocumentRegister(user);
         return documentBank;
     }
-    private Document registerDocumentFound(DocumentPostRequestBody documentPostRequestBody, Document document, Document documentVerified){
-        Document documentBank = documentRepository.save(document);
+    private Document registerDocumentFound(Document documentPostRequestBody, Document documentVerified){
         User user = userRepository.getById(documentPostRequestBody.getUserId());
         User userVerifiedBank = userRepository.getById(documentVerified.getUserId());
+        Document documentBank = documentRepository.save(documentPostRequestBody);
         emailHelper.sentEmailDocumentFoundBank(user,userVerifiedBank);
         return documentBank;
     }
     private Document simpleBuilderDocument(DocumentPostRequestBody documentPostRequestBody){
         return Document.builder()
                 .numberDocument(documentPostRequestBody.getNumberDocument())
+                .situation(documentPostRequestBody.getSituation())
                 .userId(documentPostRequestBody.getUserId())
                 .build();
     }
