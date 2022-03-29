@@ -21,8 +21,8 @@ public class DevConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception{
-        User u1 = new User(null, "usser1@gmail.com","123");
-        User u2 = new User(null, "usser2@gmail.com","123");
+        User u1 = new User(null,"leohotmail", "leopoldocd@hotmail.com","123");
+        User u2 = new User(null, "leogmail","leocdemetrio@gmail.com","123");
         userRepository.saveAll(Arrays.asList(u1,u2));
 
         Document d1 = new Document(null, "11111", u1.getId());
