@@ -1,7 +1,9 @@
 package com.project.achadosperdidos.service;
 
 
+import com.project.achadosperdidos.domain.Email;
 import com.project.achadosperdidos.domain.User;
+import com.project.achadosperdidos.helper.EmailHelper;
 import com.project.achadosperdidos.repository.UserRepository;
 import com.project.achadosperdidos.request.UserPostRequestBody;
 import com.project.achadosperdidos.request.UserPutRequestBody;
@@ -17,6 +19,8 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final EmailService emailService;
+    private final EmailHelper emailHelper;
 
     public List<User> listAll(){
         return userRepository.findAll();
@@ -28,7 +32,9 @@ public class UserService {
 
     public User save(UserPostRequestBody userRequestBody) {
         User user = User.builder().email(userRequestBody.getEmail()).password(userRequestBody.getPassword()).build();
-        return userRepository.save(user);
+        User userBank = userRepository.save(user);
+        emailHelper.sentEmailUserRegister(userBank);
+        return userBank;
     }
 
     public void delete(Long id) {

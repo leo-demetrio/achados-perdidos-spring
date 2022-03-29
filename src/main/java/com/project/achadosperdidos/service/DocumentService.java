@@ -1,7 +1,10 @@
 package com.project.achadosperdidos.service;
 
 import com.project.achadosperdidos.domain.Document;
+import com.project.achadosperdidos.domain.User;
+import com.project.achadosperdidos.helper.EmailHelper;
 import com.project.achadosperdidos.repository.DocumentRepository;
+import com.project.achadosperdidos.repository.UserRepository;
 import com.project.achadosperdidos.request.DocumentPostRequestBody;
 import com.project.achadosperdidos.request.DocumentPutRequestBody;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,8 @@ import java.util.List;
 public class DocumentService {
 
     private final DocumentRepository documentRepository;
+    private final EmailHelper emailHelper;
+    private final UserRepository userRepository;
 
 
     public List<Document> listAll(){
@@ -32,7 +37,10 @@ public class DocumentService {
                 .numberDocument(documentPostRequestBody.getNumberDocument())
                 .userId(documentPostRequestBody.getUserId())
                 .build();
-        return documentRepository.save(document);
+        Document documentBank = documentRepository.save(document);
+        User user = userRepository.getById(documentPostRequestBody.getUserId());
+        emailHelper.sentEmailDocumentRegister(user);
+        return documentBank;
     }
     public void delete(Long id){
         documentRepository.delete(findByIdOrThrowsBadRequestException(id));
