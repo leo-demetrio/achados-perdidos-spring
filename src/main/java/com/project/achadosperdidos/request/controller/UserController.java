@@ -1,7 +1,7 @@
 package com.project.achadosperdidos.request.controller;
 
 
-import com.project.achadosperdidos.domain.User;
+import com.project.achadosperdidos.service.domain.User;
 import com.project.achadosperdidos.request.UserPostRequestBody;
 import com.project.achadosperdidos.request.UserPutRequestBody;
 import com.project.achadosperdidos.service.UserService;

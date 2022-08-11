@@ -1,8 +1,7 @@
 package com.project.achadosperdidos.service;
 
 
-import com.project.achadosperdidos.domain.Email;
-import com.project.achadosperdidos.domain.User;
+import com.project.achadosperdidos.service.domain.User;
 import com.project.achadosperdidos.helper.EmailHelper;
 import com.project.achadosperdidos.repository.UserRepository;
 import com.project.achadosperdidos.request.UserPostRequestBody;

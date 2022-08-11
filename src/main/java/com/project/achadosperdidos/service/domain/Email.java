@@ -1,6 +1,6 @@
-package com.project.achadosperdidos.domain;
+package com.project.achadosperdidos.service.domain;
 
-import com.project.achadosperdidos.enums.StatusEmail;
+import com.project.achadosperdidos.enums.StatusEmailEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +26,6 @@ public class Email implements Serializable {
     @Column(columnDefinition = "text")
     private String text;
     private LocalDateTime sendDateEmail;
-    private StatusEmail statusEmail;
+    private StatusEmailEnum statusEmail;
 
 }

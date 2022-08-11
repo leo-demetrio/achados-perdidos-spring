@@ -1,6 +1,6 @@
 package com.project.achadosperdidos.request.controller;
 
-import com.project.achadosperdidos.domain.ObjectInput;
+import com.project.achadosperdidos.service.domain.ObjectInput;
 import com.project.achadosperdidos.request.DocumentPostRequestBody;
 import com.project.achadosperdidos.request.DocumentPutRequestBody;
 import com.project.achadosperdidos.service.DocumentService;
