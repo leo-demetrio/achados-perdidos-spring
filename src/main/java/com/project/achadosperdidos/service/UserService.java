@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class UserService {
     public List<User> listAll(){
         return userRepository.findAll();
     }
-    public User findByIdOrThrowsBadRequestException(Long id){
+    public User findByIdOrThrowsBadRequestException(UUID id){
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Document not found"));
     }
@@ -36,7 +37,7 @@ public class UserService {
         return userBank;
     }
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
         userRepository.delete(findByIdOrThrowsBadRequestException(id));
     }
 

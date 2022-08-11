@@ -2,7 +2,7 @@ package com.project.achadosperdidos.config;
 
 import com.project.achadosperdidos.service.domain.ObjectInput;
 import com.project.achadosperdidos.service.domain.User;
-import com.project.achadosperdidos.repository.DocumentRepository;
+import com.project.achadosperdidos.repository.ObjectInputRepository;
 import com.project.achadosperdidos.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 public class DevConfig implements CommandLineRunner {
 
     private final UserRepository userRepository;
-    private final DocumentRepository documentRepository;
+    private final ObjectInputRepository objectInputRepository;
 
     @Override
     public void run(String... args) throws Exception{
@@ -28,7 +28,7 @@ public class DevConfig implements CommandLineRunner {
         ObjectInput d1 = new ObjectInput(null, "11111","lost", u1.getId());
         ObjectInput d2 = new ObjectInput(null, "11112","lost", u1.getId());
         ObjectInput d3 = new ObjectInput(null, "22222","found", u2.getId());
-        documentRepository.saveAll(Arrays.asList(d1,d2,d3));
+        objectInputRepository.saveAll(Arrays.asList(d1,d2,d3));
     }
 
 }

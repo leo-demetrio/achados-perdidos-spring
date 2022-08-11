@@ -1,15 +1,15 @@
 package com.project.achadosperdidos.helper;
 
 import com.project.achadosperdidos.service.domain.ObjectInput;
-import com.project.achadosperdidos.repository.DocumentRepository;
+import com.project.achadosperdidos.repository.ObjectInputRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class VerificationDocumentInBankHelper {
-    public final DocumentRepository documentRepository;
+    public final ObjectInputRepository objectInputRepository;
     public ObjectInput verifyDocumentInBank(String numberDocument){
-        return documentRepository.findByNumberDocument(numberDocument);
+        return objectInputRepository.findByNumberDocument(numberDocument);
     }
 }

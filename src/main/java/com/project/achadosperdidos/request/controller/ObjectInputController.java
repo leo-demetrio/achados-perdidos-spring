@@ -1,9 +1,10 @@
 package com.project.achadosperdidos.request.controller;
 
+
 import com.project.achadosperdidos.service.domain.ObjectInput;
 import com.project.achadosperdidos.request.DocumentPostRequestBody;
 import com.project.achadosperdidos.request.DocumentPutRequestBody;
-import com.project.achadosperdidos.service.DocumentService;
+import com.project.achadosperdidos.service.ObjectInputService;
 import com.project.achadosperdidos.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("documents")
@@ -21,7 +23,7 @@ import java.util.List;
 @CrossOrigin(value = "*")
 public class ObjectInputController {
 
-    private final DocumentService documentService;
+    private final ObjectInputService documentService;
     private final DateUtil dateUtil;
 
     @GetMapping
@@ -31,12 +33,12 @@ public class ObjectInputController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<ObjectInput> listOne(@PathVariable Long id){
+    public ResponseEntity<ObjectInput> listOne(@PathVariable UUID id){
         log.info(dateUtil.formatLocalDateTimeTiDatabaseStyle(LocalDateTime.now()));
         return new ResponseEntity<>(documentService.findByIdOrThrowsBadRequestException(id), HttpStatus.OK);
     }
     @GetMapping(path = "/user/{id}")
-    public ResponseEntity<List<ObjectInput>> listAllOfUser(@PathVariable Long id){
+    public ResponseEntity<List<ObjectInput>> listAllOfUser(@PathVariable UUID id){
         log.info(dateUtil.formatLocalDateTimeTiDatabaseStyle(LocalDateTime.now()));
         return new ResponseEntity<>(documentService.findDocumentsByIdOrThrowsBadRequestException(id), HttpStatus.OK);
     }
