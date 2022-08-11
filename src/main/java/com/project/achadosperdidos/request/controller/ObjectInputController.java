@@ -1,6 +1,6 @@
-package com.project.achadosperdidos.controller;
+package com.project.achadosperdidos.request.controller;
 
-import com.project.achadosperdidos.domain.Document;
+import com.project.achadosperdidos.domain.ObjectInput;
 import com.project.achadosperdidos.request.DocumentPostRequestBody;
 import com.project.achadosperdidos.request.DocumentPutRequestBody;
 import com.project.achadosperdidos.service.DocumentService;
@@ -18,29 +18,31 @@ import java.util.List;
 @RequestMapping("documents")
 @Log4j2
 @RequiredArgsConstructor
-public class DocumentController {
+@CrossOrigin(value = "*")
+public class ObjectInputController {
 
     private final DocumentService documentService;
     private final DateUtil dateUtil;
 
     @GetMapping
-    public ResponseEntity<List<Document>> listAll(){
+    public ResponseEntity<List<ObjectInput>> listAll(){
         log.info(dateUtil.formatLocalDateTimeTiDatabaseStyle(LocalDateTime.now()));
         return new ResponseEntity<>(documentService.listAll(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Document> listOne(@PathVariable Long id){
+    public ResponseEntity<ObjectInput> listOne(@PathVariable Long id){
         log.info(dateUtil.formatLocalDateTimeTiDatabaseStyle(LocalDateTime.now()));
         return new ResponseEntity<>(documentService.findByIdOrThrowsBadRequestException(id), HttpStatus.OK);
     }
     @GetMapping(path = "/user/{id}")
-    public ResponseEntity<List<Document>> listAllOfUser(@PathVariable Long id){
+    public ResponseEntity<List<ObjectInput>> listAllOfUser(@PathVariable Long id){
         log.info(dateUtil.formatLocalDateTimeTiDatabaseStyle(LocalDateTime.now()));
         return new ResponseEntity<>(documentService.findDocumentsByIdOrThrowsBadRequestException(id), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<Document> save(@RequestBody DocumentPostRequestBody documentPostRequestBody){
+    public ResponseEntity<ObjectInput> save(@RequestBody DocumentPostRequestBody documentPostRequestBody){
+        log.info(documentPostRequestBody);
         return new ResponseEntity<>(documentService.save(documentPostRequestBody),HttpStatus.CREATED);
     }
 

@@ -1,0 +1,231 @@
+SRP
+
+// AS IS
+
+constroi um documento
+verifica o documento
+se achou => registra documento achado
+se nao achou => regristra documento
+
+
+1 - mudar nome das classes de documento para objeto
+2 - situação => enum (alterar no dominio de string para SituationDocumentEnum )
+3 - trocar de numberDocument para comment
+4 - id => GUID (7f5a7a5c-f1b3-4d12-8b33-7081054298d5)
+
+
+pk (MYSQL) => char 32bits
+
+
+https://stackoverflow.com/questions/66936394/uuid-primary-key-for-jpa-entity-safe-approach-to-use-unique-values-on-multiple
+(Plus)
+Document(string comment, SituationDocumentEnum situation, UUID userId){
+    cria novo UUID para ID no metodo construtor
+    carrega outros valores.
+}
+
+
+@Id
+@Column(name = "id")
+@Type(type = "uuid-char")
+private UUID uuid = UUID.randomUUID();
+
+
+Extra Job
+https://stackoverflow.com/questions/5881872/domain-driven-design-how-the-layers-should-be-organized
+
+
+// 
+Document document = new Document(documentPostRequestBody.getNumberDocument(),documentPostRequestBody.getSituation(),documentPostRequestBody.getUserId());
+
+
+    private Document simpleBuilderDocument(this DocumentPostRequestBody documentPostRequestBody){
+        return Document.builder()
+                .numberDocument(documentPostRequestBody.getNumberDocument())
+                .situation(documentPostRequestBody.getSituation())
+                .userId(documentPostRequestBody.getUserId())
+                .build();
+    }
+
+
+       public Document save(DocumentPostRequestBody documentPostRequestBody) {
+
+        Document document = documentPostRequestBody.buildDocument();
+
+        Document documentVerified =
+                verificationDocumentInBank.verifyDocumentInBank(documentPostRequestBody.getNumberDocument());
+
+        if(documentVerified == null) return registerDocument(documentPostRequestBody, document);
+        if(documentPostRequestBody.getSituation().equals(documentVerified.getSituation())) return document;
+        log.info("passou");
+        return registerDocumentFound(document,documentVerified);
+    }
+
+
+    folder => Helpers
+    DocumentHelper => seria uma classe estatica
+    simpleBuilderDocument seria um medoto estatico
+
+
+    public static class DocumentHelper(){
+
+        public static Document buildDocument(this DocumentPostRequestBody documentPostRequestBody){
+        return Document.builder()
+                .numberDocument(documentPostRequestBody.getNumberDocument())
+                .situation(documentPostRequestBody.getSituation())
+                .userId(documentPostRequestBody.getUserId())
+                .build();
+    }
+    }
+
+
+        @PostMapping
+    public ResponseEntity<Document> save(@RequestBody DocumentPostRequestBody documentPostRequestBody){
+        return new ResponseEntity<>(documentService.save(documentPostRequestBody.buildDocument(uuid)),HttpStatus.CREATED);
+    }
+
+    
+       public Document save(Document document) {
+
+        Document documentVerified =
+                verificationDocumentInBank.verifyDocumentInBank(documentPostRequestBody.getNumberDocument());
+
+        if(documentVerified == null) return registerDocument(documentPostRequestBody, document);
+        if(documentPostRequestBody.getSituation().equals(documentVerified.getSituation())) return document;
+        log.info("passou");
+        return registerDocumentFound(document,documentVerified);
+    }
+
+    verificationDocumentInBank => GetExistingDocument
+    FindIfExists
+
+    
+
+
+    criar dois end points
+    POST => primeiro é para documento perdido?
+HEADER -> UUID do usuario logado
+
+builder => adiciona o UUID do usuario logado
+
+
+    PUT => segundo para alterar a situação
+    campo a mais para o UUID do usuario da ultima modicação
+
+    passa o no HEADER o UUID
+    no builder popula o UUID
+
+
+
+******
+No final do POST e Do Put chamar o NotificationService e enviar o email para o email cadastrado do UUID que fez o cadastro
+*****
+
+
+***
+Regras que agioram vaõ para o controller devem ir para a camada de Aplicação seguindo o DDD
+***
+https://www.baeldung.com/spring-rest-http-headers
+
+    ===
+
+    public Document getById(UUID uuid){
+        return documentRepository.findById(id);
+    }
+
+    public Document getByUserId(UUID userId){
+        //query para pegar documento pelo usetrt
+    }
+
+
+    public Document save(Document document) {
+        documentRepository.save(document);
+    }
+
+    public Document changeStatus(Document document, SituationDocumentEnum newStatus) {
+        documenr.Situation = newStatus;
+        documentRepository.save(document);
+    }
+
+
+
+    ===
+
+    UserService
+
+
+    public User getUserByUId(UUID userID){
+
+        // pegar UUID do usuario logado XPTO
+        return userRepository.getById(UUID userID);
+    }
+
+
+== NotificationServioce
+
+
+=> sendEmail
+
+
+
+RECAP ************************
+
+Controller =>
+
+    @PostMapping
+    public ResponseEntity<Document> save(@RequestHeader("user") String user, @RequestBody DocumentPostRequestBody documentPostRequestBody){
+        var result =  new ResponseEntity<>(documentService.save(documentPostRequestBody.builder(user)),HttpStatus.CREATED);
+
+        if(result == "ok"){ // ver como comparar
+            notification.sendEmail(result, user);
+        }
+        return result;
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<Document> listOne(@PathVariable UUID id){
+        log.info(dateUtil.formatLocalDateTimeTiDatabaseStyle(LocalDateTime.now()));
+        return new ResponseEntity<>(documentService.findByIdOrThrowsBadRequestException(id), HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<Document> changeStatus(@RequestHeader("user") String user, @PathVariable UUID id, @RequestBody NewStatusObj){
+        Document = documentService.getById(id);
+        var result =  new ResponseEntity<>(documentService.changeStatus(document,NewStatusObj), HttpStatus.ACCEPTED);
+
+        if(result == "ok"){ // ver como comparar
+            notification.sendEmail(result, user);
+        }
+
+        return result;
+    }
+
+    
+
+HELPER
+
+    public static class DocumentHelper(UUID uuid){
+
+        public static Document buildDocument(this DocumentPostRequestBody documentPostRequestBody){
+            return Document.builder()
+                    .numberDocument(documentPostRequestBody.getNumberDocument())
+                    .situation(documentPostRequestBody.getSituation())
+                    .userId(uuid)
+                    .build();
+        }
+    }
+
+
+DOCUMENT SERVICE
+
+
+
+
+    public Document save(Document document) {
+        documentRepository.save(document);
+    }
+
+    public Document changeStatus(Document document, SituationDocumentEnum newStatus) {
+        documenr.Situation = newStatus;
+        documentRepository.save(document);
+    }
