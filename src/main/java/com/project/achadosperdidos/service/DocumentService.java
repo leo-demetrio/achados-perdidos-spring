@@ -1,6 +1,6 @@
 package com.project.achadosperdidos.service;
 
-import com.project.achadosperdidos.domain.Document;
+import com.project.achadosperdidos.domain.ObjectInput;
 import com.project.achadosperdidos.domain.User;
 import com.project.achadosperdidos.helper.EmailHelper;
 import com.project.achadosperdidos.helper.VerificationDocumentInBankHelper;
@@ -27,53 +27,55 @@ public class DocumentService {
     private final VerificationDocumentInBankHelper verificationDocumentInBank;
 
 
-    public List<Document> listAll(){
+    public List<ObjectInput> listAll(){
         return documentRepository.findAll();
     }
-    public Document findByIdOrThrowsBadRequestException(Long id){
+    public ObjectInput findByIdOrThrowsBadRequestException(Long id){
             return documentRepository.findById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Document not found"));
     }
-    public Document save(DocumentPostRequestBody documentPostRequestBody) {
-        Document document = simpleBuilderDocument(documentPostRequestBody);
-        Document documentVerified =
-                verificationDocumentInBank.verifyDocumentInBank(documentPostRequestBody.getNumberDocument());
+    public ObjectInput save(DocumentPostRequestBody documentPostRequestBody) {
+        ObjectInput objectInput = simpleBuilderDocument(documentPostRequestBody);
+        ObjectInput objectInputVerifiedInBank = documentRepository.findByNumberDocument(objectInput.getNumberDocument());
 
-        if(documentVerified == null) return registerDocument(documentPostRequestBody, document);
-        if(documentPostRequestBody.getSituation().equals(documentVerified.getSituation())) return document;
-        log.info("passou");
-        return registerDocumentFound(document,documentVerified);
+        if(objectInputVerifiedInBank == null) return registerDocument(objectInput);
+
+        if(objectInput.getSituation().equals(objectInputVerifiedInBank.getSituation())) return objectInput;
+
+        return registerDocumentFound(objectInput, objectInputVerifiedInBank);
     }
     public void delete(Long id){
         documentRepository.delete(findByIdOrThrowsBadRequestException(id));
     }
-    public Document replaceOrThrowsBadRequestException(DocumentPutRequestBody documentPutRequestBody){
-        Document documentBank = findByIdOrThrowsBadRequestException(documentPutRequestBody.getId());
-        documentBank.setNumberDocument(documentPutRequestBody.getNumberDocument());
-        return documentRepository.save(documentBank);
+    public ObjectInput replaceOrThrowsBadRequestException(DocumentPutRequestBody documentPutRequestBody){
+        ObjectInput objectInputBank = findByIdOrThrowsBadRequestException(documentPutRequestBody.getId());
+        objectInputBank.setNumberDocument(documentPutRequestBody.getNumberDocument());
+        return documentRepository.save(objectInputBank);
     }
 
-    public List<Document> findDocumentsByIdOrThrowsBadRequestException(Long id) {
+    public List<ObjectInput> findDocumentsByIdOrThrowsBadRequestException(Long id) {
         return documentRepository.findByUserId(id);
     }
-    private Document registerDocument(DocumentPostRequestBody documentPostRequestBody, Document document){
-        Document documentBank = documentRepository.save(document);
-        User user = userRepository.getById(documentPostRequestBody.getUserId());
+    private ObjectInput registerDocument(ObjectInput objectInput){
+        log.info(objectInput + "Register document");
+        ObjectInput objectInputBank = documentRepository.save(objectInput);
+        User user = userRepository.getById(objectInput.getUserId());
         emailHelper.sentEmailDocumentRegister(user);
-        return documentBank;
+        return objectInputBank;
     }
-    private Document registerDocumentFound(Document documentPostRequestBody, Document documentVerified){
-        User user = userRepository.getById(documentPostRequestBody.getUserId());
-        User userVerifiedBank = userRepository.getById(documentVerified.getUserId());
-        Document documentBank = documentRepository.save(documentPostRequestBody);
+    private ObjectInput registerDocumentFound(ObjectInput objectInput, ObjectInput objectInputVerifiedInBank){
+        User user = userRepository.getById(objectInput.getUserId());
+        User userVerifiedBank = userRepository.getById(objectInputVerifiedInBank.getUserId());
+        ObjectInput objectInputBank = documentRepository.save(objectInput);
         emailHelper.sentEmailDocumentFoundBank(user,userVerifiedBank);
-        return documentBank;
+        return objectInputBank;
     }
-    private Document simpleBuilderDocument(DocumentPostRequestBody documentPostRequestBody){
-        return Document.builder()
+    private ObjectInput simpleBuilderDocument(DocumentPostRequestBody documentPostRequestBody){
+        return ObjectInput.builder()
                 .numberDocument(documentPostRequestBody.getNumberDocument())
                 .situation(documentPostRequestBody.getSituation())
-                .userId(documentPostRequestBody.getUserId())
+//                .userId(documentPostRequestBody.getUserId())
+                .userId(1l)
                 .build();
     }
 }

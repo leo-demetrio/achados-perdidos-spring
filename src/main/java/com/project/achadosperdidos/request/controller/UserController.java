@@ -1,4 +1,4 @@
-package com.project.achadosperdidos.controller;
+package com.project.achadosperdidos.request.controller;
 
 
 import com.project.achadosperdidos.domain.User;

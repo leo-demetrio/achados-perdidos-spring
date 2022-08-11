@@ -1,6 +1,5 @@
 package com.project.achadosperdidos.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +13,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name= "tb_document")
-public class Document {
+public class ObjectInput {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
