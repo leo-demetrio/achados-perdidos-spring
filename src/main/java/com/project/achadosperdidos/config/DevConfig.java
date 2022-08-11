@@ -1,7 +1,7 @@
 package com.project.achadosperdidos.config;
 
-import com.project.achadosperdidos.domain.ObjectInput;
-import com.project.achadosperdidos.domain.User;
+import com.project.achadosperdidos.service.domain.ObjectInput;
+import com.project.achadosperdidos.service.domain.User;
 import com.project.achadosperdidos.repository.DocumentRepository;
 import com.project.achadosperdidos.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

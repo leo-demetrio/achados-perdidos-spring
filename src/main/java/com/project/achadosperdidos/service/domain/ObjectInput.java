@@ -1,5 +1,4 @@
-package com.project.achadosperdidos.domain;
-
+package com.project.achadosperdidos.service.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,15 +10,15 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Builder
-@Table(name= "tb_user")
-public class User {
+@Entity
+@Table(name= "tb_document")
+public class ObjectInput {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String email;
-    private String password;
+    private String numberDocument;
+    private String situation;
+    private Long userId;
 }

@@ -1,7 +1,7 @@
 package com.project.achadosperdidos.service;
 
-import com.project.achadosperdidos.domain.Email;
-import com.project.achadosperdidos.enums.StatusEmail;
+import com.project.achadosperdidos.service.domain.Email;
+import com.project.achadosperdidos.enums.StatusEmailEnum;
 import com.project.achadosperdidos.repository.EmailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
@@ -30,10 +30,10 @@ public class EmailService {
             message.setText(email.getText());
             emailSender.send(message);
 
-            email.setStatusEmail(StatusEmail.SENT);
+            email.setStatusEmail(StatusEmailEnum.SENT);
 
         } catch (MailException e){
-            email.setStatusEmail(StatusEmail.ERROR);
+            email.setStatusEmail(StatusEmailEnum.ERROR);
         } finally {
             return emailRepository.save(email);
         }

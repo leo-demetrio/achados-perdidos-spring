@@ -1,7 +1,7 @@
 package com.project.achadosperdidos.service;
 
-import com.project.achadosperdidos.domain.ObjectInput;
-import com.project.achadosperdidos.domain.User;
+import com.project.achadosperdidos.service.domain.ObjectInput;
+import com.project.achadosperdidos.service.domain.User;
 import com.project.achadosperdidos.helper.EmailHelper;
 import com.project.achadosperdidos.helper.VerificationDocumentInBankHelper;
 import com.project.achadosperdidos.repository.DocumentRepository;

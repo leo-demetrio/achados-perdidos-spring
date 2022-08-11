@@ -1,6 +1,6 @@
 package com.project.achadosperdidos.repository;
 
-import com.project.achadosperdidos.domain.ObjectInput;
+import com.project.achadosperdidos.service.domain.ObjectInput;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

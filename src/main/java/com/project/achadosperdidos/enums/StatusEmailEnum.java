@@ -1,6 +1,6 @@
 package com.project.achadosperdidos.enums;
 
-public enum StatusEmail {
+public enum StatusEmailEnum {
     SENT,
     ERROR;
 }

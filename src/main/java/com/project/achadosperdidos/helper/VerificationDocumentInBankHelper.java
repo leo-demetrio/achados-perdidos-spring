@@ -1,6 +1,6 @@
 package com.project.achadosperdidos.helper;
 
-import com.project.achadosperdidos.domain.ObjectInput;
+import com.project.achadosperdidos.service.domain.ObjectInput;
 import com.project.achadosperdidos.repository.DocumentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
