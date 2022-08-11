@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("users")
@@ -31,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<User> listOne(@PathVariable Long id){
+    public ResponseEntity<User> listOne(@PathVariable UUID id){
         return new ResponseEntity<>(userService.findByIdOrThrowsBadRequestException(id), HttpStatus.OK);
     }
 
@@ -40,7 +41,7 @@ public class UserController {
         return new ResponseEntity<>(userService.save(userRequestBody),HttpStatus.CREATED);
     }
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable UUID id){
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
