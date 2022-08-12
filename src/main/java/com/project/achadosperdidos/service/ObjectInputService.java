@@ -1,13 +1,12 @@
 package com.project.achadosperdidos.service;
 
-import com.project.achadosperdidos.service.domain.ObjectInput;
-import com.project.achadosperdidos.service.domain.User;
 import com.project.achadosperdidos.helper.EmailHelper;
 import com.project.achadosperdidos.helper.VerificationDocumentInBankHelper;
 import com.project.achadosperdidos.repository.ObjectInputRepository;
 import com.project.achadosperdidos.repository.UserRepository;
-import com.project.achadosperdidos.request.DocumentPostRequestBody;
-import com.project.achadosperdidos.request.DocumentPutRequestBody;
+import com.project.achadosperdidos.request.ObjectInputPutRequestBody;
+import com.project.achadosperdidos.service.domain.ObjectInput;
+import com.project.achadosperdidos.service.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -35,8 +34,7 @@ public class ObjectInputService {
             return objectInputRepository.findById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Document not found"));
     }
-    public ObjectInput save(DocumentPostRequestBody documentPostRequestBody) {
-        ObjectInput objectInput = simpleBuilderDocument(documentPostRequestBody);
+    public ObjectInput save(ObjectInput objectInput) {
         ObjectInput objectInputVerifiedInBank = objectInputRepository.findByNumberDocument(objectInput.getNumberDocument());
 
         if(objectInputVerifiedInBank == null) return registerDocument(objectInput);
@@ -48,9 +46,9 @@ public class ObjectInputService {
     public void delete(UUID id){
         objectInputRepository.delete(findByIdOrThrowsBadRequestException(id));
     }
-    public ObjectInput replaceOrThrowsBadRequestException(DocumentPutRequestBody documentPutRequestBody){
-        ObjectInput objectInputBank = findByIdOrThrowsBadRequestException(documentPutRequestBody.getId());
-        objectInputBank.setNumberDocument(documentPutRequestBody.getNumberDocument());
+    public ObjectInput replaceOrThrowsBadRequestException(ObjectInputPutRequestBody objectInputPutRequestBody){
+        ObjectInput objectInputBank = findByIdOrThrowsBadRequestException(objectInputPutRequestBody.getId());
+        objectInputBank.setNumberDocument(objectInputPutRequestBody.getNumberDocument());
         return objectInputRepository.save(objectInputBank);
     }
 
@@ -60,6 +58,7 @@ public class ObjectInputService {
     private ObjectInput registerDocument(ObjectInput objectInput){
         log.info(objectInput + "Register document");
         ObjectInput objectInputBank = objectInputRepository.save(objectInput);
+        log.info(objectInputBank + "bank document");
         User user = userRepository.getById(objectInput.getUserId());
         emailHelper.sentEmailDocumentRegister(user);
         return objectInputBank;
@@ -71,12 +70,5 @@ public class ObjectInputService {
         emailHelper.sentEmailDocumentFoundBank(user,userVerifiedBank);
         return objectInputBank;
     }
-    private ObjectInput simpleBuilderDocument(DocumentPostRequestBody documentPostRequestBody){
-        return ObjectInput.builder()
-                .numberDocument(documentPostRequestBody.getNumberDocument())
-                .situation(documentPostRequestBody.getSituation())
-//                .userId(documentPostRequestBody.getUserId())
-                //.userId(1)
-                .build();
-    }
+
 }
