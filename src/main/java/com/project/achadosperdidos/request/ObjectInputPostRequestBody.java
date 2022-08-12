@@ -6,7 +6,8 @@ import java.util.UUID;
 
 
 @Data
-public class DocumentPutRequestBody {
-    private UUID id;
+public class ObjectInputPostRequestBody {
     private String numberDocument;
+    private String situation;
+    private UUID userId;
 }

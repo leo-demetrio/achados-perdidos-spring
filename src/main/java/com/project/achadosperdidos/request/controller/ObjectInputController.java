@@ -1,9 +1,9 @@
 package com.project.achadosperdidos.request.controller;
 
 
+import com.project.achadosperdidos.request.ObjectInputPostRequestBody;
 import com.project.achadosperdidos.service.domain.ObjectInput;
-import com.project.achadosperdidos.request.DocumentPostRequestBody;
-import com.project.achadosperdidos.request.DocumentPutRequestBody;
+import com.project.achadosperdidos.request.ObjectInputPutRequestBody;
 import com.project.achadosperdidos.service.ObjectInputService;
 import com.project.achadosperdidos.util.DateUtil;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import static com.project.achadosperdidos.helper.ObjectInputBuilderHelper.buildObjectInput;
 
 @RestController
 @RequestMapping("documents")
@@ -43,15 +45,15 @@ public class ObjectInputController {
         return new ResponseEntity<>(documentService.findDocumentsByIdOrThrowsBadRequestException(id), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<ObjectInput> save(@RequestBody DocumentPostRequestBody documentPostRequestBody){
-        log.info(documentPostRequestBody);
-        return new ResponseEntity<>(documentService.save(documentPostRequestBody),HttpStatus.CREATED);
+    public ResponseEntity<ObjectInput> save(@RequestBody ObjectInputPostRequestBody objectInputPostRequestBody){
+        log.info(objectInputPostRequestBody);
+        return new ResponseEntity<>(documentService.save(buildObjectInput(objectInputPostRequestBody)),HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<Void> update(@RequestBody DocumentPutRequestBody documentPutRequestBody){
+    public ResponseEntity<Void> update(@RequestBody ObjectInputPutRequestBody objectInputPutRequestBody){
         log.info(dateUtil.formatLocalDateTimeTiDatabaseStyle(LocalDateTime.now()));
-        log.info(documentService.replaceOrThrowsBadRequestException(documentPutRequestBody));
+        log.info(documentService.replaceOrThrowsBadRequestException(objectInputPutRequestBody));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

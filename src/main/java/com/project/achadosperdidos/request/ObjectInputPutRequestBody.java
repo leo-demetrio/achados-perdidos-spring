@@ -2,10 +2,11 @@ package com.project.achadosperdidos.request;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 
 @Data
-public class DocumentPostRequestBody {
+public class ObjectInputPutRequestBody {
+    private UUID id;
     private String numberDocument;
-    private String situation;
-    private Long userId;
 }
