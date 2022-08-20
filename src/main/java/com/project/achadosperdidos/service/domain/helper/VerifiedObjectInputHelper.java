@@ -7,27 +7,43 @@ import com.project.achadosperdidos.request.ObjectInputPostRequestBody;
 import com.project.achadosperdidos.service.ObjectInputService;
 import com.project.achadosperdidos.service.domain.ObjectInput;
 import com.project.achadosperdidos.service.domain.User;
-import lombok.RequiredArgsConstructor;
+import com.project.achadosperdidos.service.domain.util.RegisterDocument;
 import org.springframework.stereotype.Service;
 
 import static com.project.achadosperdidos.helper.ObjectInputBuilderHelper.buildObjectInput;
 
-@RequiredArgsConstructor
+
 @Service
 public class VerifiedObjectInputHelper {
     private final ObjectInputRepository objectInputRepository;
     private final ObjectInputService objectInputService;
     private final UserRepository userRepository;
     private final EmailHelper emailHelper;
+    private final RegisterDocument registerDocument;
+
+    public VerifiedObjectInputHelper(
+            ObjectInputRepository objectInputRepository,
+            ObjectInputService objectInputService,
+            UserRepository userRepository,
+            EmailHelper emailHelper,
+            RegisterDocument registerDocument)
+    {
+
+        this.objectInputRepository = objectInputRepository;
+        this.objectInputService = objectInputService;
+        this.userRepository = userRepository;
+        this.emailHelper = emailHelper;
+        this.registerDocument = registerDocument;
+    }
 
     public Object verifiedObjectInputInDataBase(ObjectInputPostRequestBody objectInputPostRequestBody){
         ObjectInput objectInputVerifiedInBank = objectInputRepository.findByNumberDocument(objectInputPostRequestBody.getNumberDocument());
-
+        User userOwnerDocument = userRepository.getById(objectInputPostRequestBody.getUserId());
+        System.out.println(userOwnerDocument);
         if(objectInputVerifiedInBank == null) {
-            emailHelper.sentEmailDocumentRegister(userRepository.getById(objectInputVerifiedInBank.getUserId()));
-            return objectInputService.save(buildObjectInput(objectInputPostRequestBody));
+            registerDocument.registerDocument(userOwnerDocument,objectInputPostRequestBody);
+            return objectInputPostRequestBody;
         }
-
         if(objectInputPostRequestBody.getSituation().equals(objectInputVerifiedInBank.getSituation())) return objectInputPostRequestBody;
 
         return registerDocumentFound(objectInputPostRequestBody, objectInputVerifiedInBank);
