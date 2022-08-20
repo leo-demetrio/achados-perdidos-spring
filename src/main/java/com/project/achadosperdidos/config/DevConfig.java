@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 @Configuration
 @Profile("dev")
@@ -21,7 +22,7 @@ public class DevConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception{
-        User u1 = new User(null,"leohotmail", "leopoldocd@hotmail.com","123");
+        User u1 = new User(null, "leohotmail", "leopoldocd@hotmail.com","123");
         User u2 = new User(null, "leogmail","leocdemetrio@gmail.com","123");
         userRepository.saveAll(Arrays.asList(u1,u2));
 
