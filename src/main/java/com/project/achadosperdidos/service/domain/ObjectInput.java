@@ -5,8 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.UUID;
+
 
 @Data
 @AllArgsConstructor
@@ -22,4 +26,5 @@ public class ObjectInput {
     private String numberDocument;
     private String situation;
     private UUID userId;
+
 }

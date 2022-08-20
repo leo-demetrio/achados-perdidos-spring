@@ -35,13 +35,7 @@ public class ObjectInputService {
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Document not found"));
     }
     public ObjectInput save(ObjectInput objectInput) {
-        ObjectInput objectInputVerifiedInBank = objectInputRepository.findByNumberDocument(objectInput.getNumberDocument());
-
-        if(objectInputVerifiedInBank == null) return registerDocument(objectInput);
-
-        if(objectInput.getSituation().equals(objectInputVerifiedInBank.getSituation())) return objectInput;
-
-        return registerDocumentFound(objectInput, objectInputVerifiedInBank);
+        return objectInputRepository.save(objectInput);
     }
     public void delete(UUID id){
         objectInputRepository.delete(findByIdOrThrowsBadRequestException(id));

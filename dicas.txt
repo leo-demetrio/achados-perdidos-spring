@@ -10,7 +10,7 @@ se nao achou => regristra documento
 
 1 - mudar nome das classes de documento para objeto
 2 - situação => enum (alterar no dominio de string para SituationDocumentEnum )
-3 - trocar de numberDocument para comment
+3 - trocar de numberDocument para comment#####################################################
 4 - id => GUID (7f5a7a5c-f1b3-4d12-8b33-7081054298d5)
 
 

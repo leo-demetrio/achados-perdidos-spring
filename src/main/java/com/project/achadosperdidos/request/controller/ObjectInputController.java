@@ -5,6 +5,7 @@ import com.project.achadosperdidos.request.ObjectInputPostRequestBody;
 import com.project.achadosperdidos.service.domain.ObjectInput;
 import com.project.achadosperdidos.request.ObjectInputPutRequestBody;
 import com.project.achadosperdidos.service.ObjectInputService;
+import com.project.achadosperdidos.service.domain.helper.VerifiedObjectInputHelper;
 import com.project.achadosperdidos.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -28,6 +29,8 @@ public class ObjectInputController {
     private final ObjectInputService documentService;
     private final DateUtil dateUtil;
 
+    private final VerifiedObjectInputHelper verifiedObjectInputHelper;
+
     @GetMapping
     public ResponseEntity<List<ObjectInput>> listAll(){
         log.info(dateUtil.formatLocalDateTimeTiDatabaseStyle(LocalDateTime.now()));
@@ -45,9 +48,9 @@ public class ObjectInputController {
         return new ResponseEntity<>(documentService.findDocumentsByIdOrThrowsBadRequestException(id), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<ObjectInput> save(@RequestBody ObjectInputPostRequestBody objectInputPostRequestBody){
-        log.info(objectInputPostRequestBody);
-        return new ResponseEntity<>(documentService.save(buildObjectInput(objectInputPostRequestBody)),HttpStatus.CREATED);
+    public ResponseEntity<Object> save(@RequestBody ObjectInputPostRequestBody objectInputPostRequestBody){
+        Object object = verifiedObjectInputHelper.verifiedObjectInputInDataBase(objectInputPostRequestBody);
+        return new ResponseEntity<>(object,HttpStatus.CREATED);
     }
 
     @PutMapping
